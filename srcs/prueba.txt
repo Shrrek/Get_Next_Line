@@ -1,0 +1,7 @@
+0123456789
+abcdefghijk
+
+linea despues de vacio
+linea acabada en 0
+
+2a linea despues de vacio
