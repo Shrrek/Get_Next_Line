@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jperales <jperales@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/20 16:44:31 by jperales          #+#    #+#             */
-/*   Updated: 2021/11/12 17:55:01 by jperales         ###   ########.fr       */
+/*   Created: 2021/11/12 18:05:35 by jperales          #+#    #+#             */
+/*   Updated: 2021/11/12 18:10:13 by jperales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*get_next_line(int fd)
 {
 	char		*buffer;
 	int			bytes_read;
-	static char	*store;
+	static char	*store[4049];
 	char		*line;
 
 	bytes_read = 1;
@@ -89,37 +89,17 @@ char	*get_next_line(int fd)
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (!ft_strchr(store, '\n') && bytes_read > 0)
+	while (!ft_strchr(store[fd], '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		ft_free(buffer, bytes_read);
 		if (bytes_read == -1)
 			return (NULL);
 		buffer[bytes_read] = '\0';
-		store = ft_strjoin(store, buffer);
+		store[fd] = ft_strjoin(store[fd], buffer);
 	}
 	free(buffer);
-	line = ft_get_line(store);
-	store = ft_new_store(store);
+	line = ft_get_line(store[fd]);
+	store[fd] = ft_new_store(store[fd]);
 	return (line);
 }
-
-/*int	main(void)
-{
-	int		fd;
-	char	*line;
-	int		i;
-
-	i = 1;
-	fd = open("prueba2.txt", O_RDONLY);
-	printf("el fd: %d", fd);
-	while (i < 8)
-	{
-		line = get_next_line(fd);
-		printf("Linea %02d: %s", i, line);
-		i++;
-		free(line);
-	}
-	close(fd);
-	return (0);
-}*/
